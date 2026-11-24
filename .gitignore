@@ -1,0 +1,9 @@
+node_modules/
+dist/
+app/vendor/
+sample/
+*.db
+*.db-journal
+.DS_Store
+.claude/
+__pycache__/

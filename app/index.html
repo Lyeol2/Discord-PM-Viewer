@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'">
+  <title>PM Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">PM</span><span class="brand-name">PM Viewer</span></div>
+      <select id="guild" class="guild-select" aria-label="서버" hidden></select>
+      <input id="search" class="search" type="search" placeholder="작업·이슈 검색" aria-label="검색">
+      <div class="topbar-right">
+        <span id="status" class="status-text"></span>
+        <button id="reload" class="btn ghost" type="button" title="다시 읽기">↻</button>
+      </div>
+    </header>
+    <div id="update" class="update-bar" hidden></div>
+    <div class="layout">
+      <nav id="nav" class="nav" aria-label="보기"></nav>
+      <main id="main" class="main" tabindex="-1"></main>
+    </div>
+    <aside id="drawer" class="drawer" hidden aria-live="polite"></aside>
+    <div id="tip" class="tip" hidden></div>
+    <div id="drop" class="drop" hidden><div>bot.db 파일을 놓으세요</div></div>
+  </div>
+  <script src="vendor/sql-wasm.js"></script>
+  <script src="bridge.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{
+  "name": "discord-pm-viewer",
+  "productName": "PM Viewer",
+  "version": "0.1.0",
+  "description": "Discord PM 봇(Discord-PM-Public)의 bot.db를 읽어 작업·이슈·마일스톤·일정·활동·작업시간을 정리해 보여주는 데스크톱 앱",
+  "author": "Lyeol2",
+  "homepage": "https://github.com/Lyeol2/Discord-PM-Viewer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lyeol2/Discord-PM-Viewer.git"
+  },
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "node scripts/copy-vendor.js",
+    "start": "electron .",
+    "sample": "python3 scripts/make_sample_db.py sample/sample.db",
+    "smoke": "electron . --smoke-test=sample/sample.db",
+    "dist": "electron-builder --publish never"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.12",
+    "sql.js": "^1.13.0"
+  },
+  "build": {
+    "appId": "io.github.lyeol2.pmviewer",
+    "productName": "PM Viewer",
+    "artifactName": "PM-Viewer-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*",
+      "package.json"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Lyeol2",
+        "repo": "Discord-PM-Viewer"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        { "target": "dmg", "arch": ["arm64", "x64"] },
+        { "target": "zip", "arch": ["arm64", "x64"] }
+      ],
+      "identity": "-",
+      "hardenedRuntime": false
+    },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Office"
+    }
+  }
+}

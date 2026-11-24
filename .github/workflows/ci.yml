@@ -1,0 +1,17 @@
+# Pull requests: make sure the app still opens a bot.db and renders every view.
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: python3 scripts/make_sample_db.py sample/sample.db
+      - run: xvfb-run -a npx electron . --no-sandbox --smoke-test=sample/sample.db
