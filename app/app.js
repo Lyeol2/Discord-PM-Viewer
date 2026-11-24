@@ -55,6 +55,7 @@
   const GROUP_CLS = { task: 'blue', issue: 'amber', milestone: 'green', event: 'violet', discussion: 'violet', github: '', other: '' };
   const TIMEZONES = ['Asia/Seoul', 'Asia/Tokyo', 'UTC', 'Europe/London', 'America/New_York', 'America/Los_Angeles'];
   const ACTIVE_VOICE_MS = 5 * 60 * 1000;
+  const MAC_INSTALL = 'curl -fsSL https://raw.githubusercontent.com/Lyeol2/Discord-PM-Viewer/main/install-mac.sh | bash';
 
   /* ---- state --------------------------------------------------------------- */
 
@@ -697,7 +698,7 @@
     switch (u.state) {
       case 'checking': return '업데이트 확인 중…';
       case 'none': return '최신 버전이에요.';
-      case 'available': return u.manual ? `새 버전 v${u.version}이 나왔어요.` : `새 버전 v${u.version} 내려받는 중…`;
+      case 'available': return u.manual ? `새 버전 v${u.version}이 나왔어요. 지금은 v${S.info.version}이에요.` : `새 버전 v${u.version} 내려받는 중…`;
       case 'progress': return `새 버전 내려받는 중… ${u.percent || 0}%`;
       case 'ready': return `새 버전 v${u.version} 준비 완료. 재시작하면 적용돼요.`;
       case 'error': return `업데이트 확인 실패: ${u.message || ''}`;
@@ -712,7 +713,8 @@
     bar.hidden = false;
     bar.innerHTML = `<span>⬆️ ${esc(updateText(u))}</span>
       ${u.state === 'ready' ? '<button type="button" class="btn small primary" data-action="install-update">지금 재시작</button>' : ''}
-      ${u.state === 'available' && u.manual ? '<button type="button" class="btn small primary" data-action="open-releases">다운로드 페이지 열기</button>' : ''}
+      ${u.state === 'available' && u.manual ? `<button type="button" class="btn small primary" data-action="copy-install">업데이트 명령 복사</button>
+        <span class="small muted" id="copy-hint">복사해서 터미널에 붙여 넣으면 업데이트돼요</span>` : ''}
       <button type="button" class="btn small ghost" data-action="dismiss-update" style="margin-left:auto">닫기</button>`;
   }
 
@@ -873,6 +875,16 @@
       case 'check-update': S.update = { state: 'checking' }; render(); Bridge.checkUpdate(); break;
       case 'install-update': Bridge.installUpdate(); break;
       case 'open-releases': Bridge.openReleases(); break;
+      case 'copy-install': {
+        const hint = $('#copy-hint');
+        try {
+          await navigator.clipboard.writeText(MAC_INSTALL);
+          if (hint) hint.textContent = '복사했어요. 터미널에 붙여 넣고 Enter를 누르세요.';
+        } catch (_) {
+          if (hint) hint.textContent = MAC_INSTALL;
+        }
+        break;
+      }
       case 'dismiss-update': $('#update').hidden = true; break;
       default: break;
     }

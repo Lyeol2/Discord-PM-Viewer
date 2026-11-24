@@ -17,21 +17,41 @@
 
 ## 설치
 
-[Releases](https://github.com/Lyeol2/Discord-PM-Viewer/releases/latest)에서 내 OS에 맞는 파일을 받습니다.
+유료 코드 서명 인증서 없이 배포하는 앱이라, 브라우저로 받으면 macOS·Windows가 "확인되지 않은 파일"이라며 막습니다. 아래 방법으로 설치하세요.
 
-| OS | 파일 | 업데이트 |
-|---|---|---|
-| Windows | `PM-Viewer-x.y.z-win-x64.exe` | 자동 (백그라운드에서 받고, 재시작하면 적용) |
-| macOS (Apple 실리콘) | `PM-Viewer-x.y.z-mac-arm64.dmg` | 새 버전 알림 → 다운로드 페이지 |
-| macOS (Intel) | `PM-Viewer-x.y.z-mac-x64.dmg` | 새 버전 알림 → 다운로드 페이지 |
-| Linux | `PM-Viewer-x.y.z-linux-x86_64.AppImage` | 자동 |
+### macOS (추천: 터미널 한 줄)
 
-**macOS 처음 실행**: 애플 개발자 인증서로 서명하지 않은 앱이라 처음엔 "확인되지 않은 개발자" 경고가 뜹니다.
-앱을 응용 프로그램 폴더로 옮긴 뒤 **시스템 설정 → 개인정보 보호 및 보안 → 그래도 열기**를 누르거나, 터미널에서 아래를 한 번 실행하세요.
+터미널을 열고 아래를 붙여 넣으세요. 최신 버전을 받아 체크섬을 확인한 뒤 `/Applications`에 설치하고 실행합니다.
+**업데이트할 때도 같은 명령**을 다시 실행하면 됩니다 (새 버전이 나오면 앱에 알림과 명령 복사 버튼이 뜹니다).
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Lyeol2/Discord-PM-Viewer/main/install-mac.sh | bash
+```
+
+`curl`로 받은 파일에는 "인터넷에서 받음" 표시가 붙지 않아서 Gatekeeper가 막지 않습니다. 스크립트 내용은 [install-mac.sh](install-mac.sh)에서 볼 수 있습니다.
+
+<details><summary>dmg로 직접 설치하려면</summary>
+
+[Releases](https://github.com/Lyeol2/Discord-PM-Viewer/releases/latest)에서 `mac-arm64.dmg`(Apple 실리콘) 또는 `mac-x64.dmg`(Intel)를 받아 앱을 응용 프로그램 폴더로 옮긴 뒤, 한 번 열려고 시도하고
+**시스템 설정 → 개인정보 보호 및 보안 → 맨 아래 "그래도 열기"** 를 누릅니다. 또는 터미널에서:
 
 ```bash
 xattr -dr com.apple.quarantine "/Applications/PM Viewer.app"
 ```
+</details>
+
+### Windows
+
+[Releases](https://github.com/Lyeol2/Discord-PM-Viewer/releases/latest)에서 `PM-Viewer-x.y.z-win-x64.exe`를 받습니다.
+
+- 브라우저가 "일반적으로 다운로드되지 않는 파일"이라며 막으면: 다운로드 목록에서 `…` → **보관**(Chrome) / **유지**(Edge)
+- 실행할 때 "Windows의 PC 보호" 창이 뜨면: **추가 정보 → 실행**
+
+설치한 뒤에는 새 버전을 백그라운드에서 받아 두었다가 재시작하면 적용됩니다.
+
+### Linux
+
+`PM-Viewer-x.y.z-linux-x86_64.AppImage`를 받아 `chmod +x` 후 실행합니다. 업데이트는 자동입니다.
 
 ## 사용법
 
@@ -79,6 +99,7 @@ npm start
 ### 구조
 
 ```
+install-mac.sh   macOS 설치·업데이트 스크립트 (curl … | bash)
 main.js          Electron 메인: 창, bot.db 읽기·감시, 자동 업데이트, 스모크 테스트
 preload.js       화면에 열어 주는 최소한의 API (window.pm)
 app/
